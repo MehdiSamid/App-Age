@@ -7,20 +7,29 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
-class Details extends StatelessWidget {
+class Details extends StatefulWidget {
+  @override
+  State<Details> createState() => _DetailsState();
+}
+
+class _DetailsState extends State<Details> {
   final format = DateFormat("yyyy-MM-dd");
+
   Age _userage = Age();
+
   final durnext _nextduration = durnext() ;
+
   final TextEditingController _birthdaydate = 
   TextEditingController(text: "2000-01-01");
-  final TextEditingController _todaydate = 
-  TextEditingController(text: "2000-01-01");
-   DateTime dateofbirth;
-   DateTime dateoftoday;
-  
-   BuildContext context;
-  
 
+  TextEditingController _todaydate = 
+  TextEditingController(text: "2000-01-01");
+
+   DateTime dateofbirth;
+
+   DateTime dateoftoday;
+
+   BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +74,6 @@ class Details extends StatelessWidget {
     );
   }
 
-  
   _datefield(){
     return Column(
       
@@ -141,9 +149,11 @@ class Details extends StatelessWidget {
               fontWeight: FontWeight.bold)),
           onPressed: () {
            
-          Age _test= calculatorage().calculateAge(dateofbirth, dateoftoday);
-          durnext _tests = calculatorage().calculatenextbirthday(dateofbirth, dateoftoday);
-          print(_tests);
+          print(_userage);
+          setState(() {
+                      _userage = calculatorage().calculateAge(dateofbirth, dateoftoday);
+
+          });
           
           },
           child:  Text("Calcule")),
@@ -151,7 +161,6 @@ class Details extends StatelessWidget {
 
     );
   }
-  
 
   Flexible birthdaydate() {
     return Flexible(
@@ -193,6 +202,7 @@ class Details extends StatelessWidget {
 
   
   }
+
   Flexible todaydate() {
     return Flexible(
     flex: 2,
@@ -217,12 +227,16 @@ class Details extends StatelessWidget {
                   onShowPicker: (context, currentValue) async{
                     
                     final date = await showDatePicker(
+                                              
                         context: context,
                         firstDate: DateTime(1900),
                         initialDate: currentValue ?? DateTime.now(),
                         lastDate: DateTime(2100),
                         );
                         dateoftoday = date;
+                        setState(() {
+                          _todaydate=date as TextEditingController;
+                        });
                         
                   },
                       
@@ -231,7 +245,7 @@ class Details extends StatelessWidget {
 
   
   }
-  
+
  shapecol(String nbr , String nbrm){
    return Container(
      decoration: BoxDecoration(
@@ -287,6 +301,7 @@ class Details extends StatelessWidget {
      ],
    );
  }
+
  nextbirthday(){
    return Row(
      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
