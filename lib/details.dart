@@ -1,5 +1,5 @@
-import 'dart:collection';
 
+import 'dart:collection';
 import 'package:app_age/age_module.dart';
 import 'package:app_age/calculateage.dart';
 import 'package:app_age/duration_model.dart';
@@ -14,15 +14,20 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   final format = DateFormat("yyyy-MM-dd");
+  String dateB;
+  String dateT;
+  
 
   Age _userage = Age();
 
-  final durnext _nextduration = durnext() ;
+  durnext _nextduration = durnext() ;
 
-  final TextEditingController _birthdaydate = 
+   // ignore: prefer_final_fields
+   TextEditingController _birthdaydate = 
   TextEditingController(text: "2000-01-01");
 
-  TextEditingController _todaydate = 
+   // ignore: prefer_final_fields
+   TextEditingController _todaydate = 
   TextEditingController(text: "2000-01-01");
 
    DateTime dateofbirth;
@@ -34,7 +39,6 @@ class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     this.context = context;
-    _nextduration.days = 16;
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: SingleChildScrollView(
@@ -136,7 +140,14 @@ class _DetailsState extends State<Details> {
               fontSize: 26.0,
               fontWeight: FontWeight.bold)),
           onPressed: () {
-            print("reset");
+            setState(() {
+              _birthdaydate.text = "2000-01-01";
+              _todaydate.text = "2000-01-01";
+              _userage = Age();
+              _nextduration = durnext();
+
+            });
+
           },
           child:  Text("Reset"),
         ),
@@ -191,11 +202,22 @@ class _DetailsState extends State<Details> {
                         firstDate: DateTime(1900),
                         initialDate: currentValue ?? DateTime.now(),
                         lastDate: DateTime(2100),
-                        
+                      
                         );
                     dateofbirth = date;
-                        
+                    if(date==null){
+                      setState(() {
+                           _birthdaydate.text = "2000-01-01";
+                        });
+                    }else{
+                        setState(() {
+                           
+                           _birthdaydate.text = DateFormat("yyyy-MM-dd").format(dateofbirth);
+                        });
+                  }
+                  return date;
                   },
+                
                       
                 ),
   );
@@ -234,10 +256,15 @@ class _DetailsState extends State<Details> {
                         lastDate: DateTime(2100),
                         );
                         dateoftoday = date;
-                        setState(() {
-                          _todaydate=date as TextEditingController;
+                         if(date==null){
+                      setState(() {
+                           _birthdaydate.text = "2000-01-01";
                         });
-                        
+                    }else{
+                        setState(() {
+                          return _todaydate.text = DateFormat("yyyy-MM-dd").format(dateoftoday);
+                        });
+                  }return date;
                   },
                       
                 ),
